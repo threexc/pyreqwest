@@ -184,6 +184,9 @@ jobs:
           - os: linux
             manylinux: auto
             target: s390x
+          - os: linux
+            manylinux: 2_31  # oldest manylinux with riscv64 support
+            target: riscv64
 
           # musllinux
           - os: linux
@@ -358,12 +361,15 @@ jobs:
             { os: windows, runs-on: windows-2025 },
             { os: windows_aarch64, runs-on: windows-11-arm },
             { os: macos, runs-on: macos-15 },
+            { os: linux_riscv64, runs-on: ubuntu-24.04-riscv },
           ]
 
     runs-on: ${{ matrix.platform.runs-on }}
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      # setup-python has no riscv64 builds; uv installs a managed interpreter from UV_PYTHON instead
       - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        if: ${{ matrix.platform.os != 'linux_riscv64' }}
         with:
           python-version: ${{ matrix.python-version }}
           allow-prereleases: true
