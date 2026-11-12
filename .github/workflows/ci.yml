@@ -158,12 +158,6 @@ jobs:
 
   build:
     name: build on ${{ matrix.os }} (${{ matrix.target }}${{ matrix.os == 'linux' && format(', manylinux={0}', matrix.manylinux) || '' }})
-    # only run on push to main and on release
-    if: |
-      startsWith(github.ref, 'refs/tags/') ||
-      github.ref == 'refs/heads/main' ||
-      contains(github.event.pull_request.labels.*.name, 'Full Build') ||
-      github.event.inputs.full_build == 'true'
     strategy:
       fail-fast: false
       matrix:
